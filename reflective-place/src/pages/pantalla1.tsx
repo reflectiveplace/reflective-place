@@ -6,7 +6,7 @@ function Pantalla1() {
           <h1 className="text-[#1E2430] font-medium leading-tight text-5xl">
             Bienvenido a
             <br />
-            Reflective Place
+            Reflective Place.
           </h1>
 
           <div className="mt-10 space-y-10">
