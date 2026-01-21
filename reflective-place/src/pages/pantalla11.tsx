@@ -24,7 +24,7 @@ function Pantalla11() {
         <div className="mt-10">
           <textarea
             className="w-full min-h-[180px] rounded-2xl border border-[#D6DEE6] bg-white px-6 py-6 text-2xl text-[#15181B] placeholder:text-[#5B6168] focus:outline-none"
-            placeholder="Escribe tu microhabito minimo aqui..."
+            placeholder="Escribe tu microhábito mínimo aquí..."
             value={microhabit}
             onChange={(event) => setMicrohabit(event.target.value)}
           />

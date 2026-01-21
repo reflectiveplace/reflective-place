@@ -1,5 +1,6 @@
 import Pantalla1 from './pages/pantalla1'
 import Pantalla2 from './pages/pantalla2'
+import Pantalla2b from './pages/pantalla2b'
 import Pantalla3 from './pages/pantalla3'
 import Pantalla4 from './pages/pantalla4'
 import Pantalla5 from './pages/pantalla5'
@@ -43,6 +44,7 @@ function App() {
   }
 
   if (screen === '2') return <Pantalla2 />
+  if (screen === '2b') return <Pantalla2b />
   if (screen === '3') return <Pantalla3 />
   if (screen === '4') return <Pantalla4 />
   if (screen === '5') return <Pantalla5 />

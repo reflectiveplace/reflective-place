@@ -148,13 +148,17 @@ function Pantalla6b() {
             <div className="flex items-start justify-center gap-3">
               <div
                 className={[
-                  "mt-1 h-4 w-4 rounded-full border-2",
+                  "mt-1 h-4 w-4 rounded-full border-2 flex items-center justify-center",
                   selected === "EMPODERADORA"
                     ? "border-[#1E6FD9] bg-white"
                     : "border-[#1E6FD9]",
                 ].join(" ")}
                 aria-hidden="true"
-              />
+              >
+                {selected === "EMPODERADORA" && (
+                  <div className="h-2 w-2 rounded-full bg-[#1E6FD9]" />
+                )}
+              </div>
               <p className="text-[#1E6FD9] font-semibold text-2xl leading-snug">
                 Creencia
                 <br />
@@ -187,13 +191,17 @@ function Pantalla6b() {
             <div className="flex items-start justify-center gap-3">
               <div
                 className={[
-                  "mt-1 h-4 w-4 rounded-full border-2",
+                  "mt-1 h-4 w-4 rounded-full border-2 flex items-center justify-center",
                   selected === "LIMITANTE"
                     ? "border-[#D6453A] bg-white"
                     : "border-[#D6453A]",
                 ].join(" ")}
                 aria-hidden="true"
-              />
+              >
+                {selected === "LIMITANTE" && (
+                  <div className="h-2 w-2 rounded-full bg-[#D6453A]" />
+                )}
+              </div>
               <p className="text-[#D6453A] font-semibold text-2xl leading-snug">
                 Creencia
                 <br />

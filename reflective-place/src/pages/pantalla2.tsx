@@ -1,8 +1,19 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 function Pantalla2() {
   const [texto, setTexto] = useState('')
   const puedeContinuar = texto.trim().length > 0
+
+  useEffect(() => {
+    const stored = localStorage.getItem("texto");
+    if (stored) setTexto(stored);
+  }, []);
+
+  useEffect(() => {
+    if (texto.trim().length > 0) {
+      localStorage.setItem("texto", texto);
+    }
+  }, [texto]);
 
   return (
     <section>
@@ -26,8 +37,8 @@ function Pantalla2() {
           Gracias por darte este espacio.
         </p>
           <a
-            href={puedeContinuar ? "?pantalla=3" : undefined}
-            onClick={() => sessionStorage.setItem('navTarget', '3')}
+            href={puedeContinuar ? "?pantalla=2b" : undefined}
+            onClick={() => sessionStorage.setItem('navTarget', '2b')}
             className={[
               "mt-auto w-full inline-flex items-center justify-center rounded-2xl px-7 py-5",
               "text-white font-medium text-2xl transition",

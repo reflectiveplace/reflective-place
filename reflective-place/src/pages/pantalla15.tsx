@@ -32,8 +32,8 @@ function Pantalla15() {
     }
     if (userType === "terapeuta") {
       return [
-        { key: "detallado" as const, label: "Detallado clinico" },
-        { key: "resumen" as const, label: "Resumen terapeutico" },
+        { key: "detallado" as const, label: "Detallado clínico" },
+        { key: "resumen" as const, label: "Resumen terapéutico" },
       ];
     }
     return [
@@ -46,7 +46,7 @@ function Pantalla15() {
     <section className="min-h-screen w-full bg-[#F7F4EF]">
       <main className="mx-auto w-full max-w-[560px] px-5 pt-12 pb-12">
         <h1 className="text-center font-semibold leading-tight text-5xl text-[#1E2430]">
-          Elige el tipo de salida segun tu rol.
+          Elige el tipo de salida según tu rol.
         </h1>
 
         <div className="mt-10 space-y-4">

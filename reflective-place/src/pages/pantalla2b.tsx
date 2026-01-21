@@ -1,29 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-type Clasificacion = "decision" | "suposición" | "presuposición";
+type Rol = "INDIVIDUAL" | "EMPRESARIO" | "RH" | "COACH";
 
-function Pantalla3() {
-  const [seleccion, setSeleccion] = useState<Clasificacion | null>(null);
+function Pantalla2b() {
+  const [rol, setRol] = useState<Rol | null>(() => {
+    const stored = localStorage.getItem("rol");
+    if (stored === "INDIVIDUAL" || stored === "EMPRESARIO" || stored === "RH" || stored === "COACH") {
+      return stored;
+    }
+    return null;
+  });
+
+  useEffect(() => {
+    if (rol) {
+      localStorage.setItem("rol", rol);
+    }
+  }, [rol]);
 
   const opciones: Array<{
-    key: Clasificacion;
+    key: Rol;
     titulo: string;
-    descripcion: string;
   }> = [
     {
-      key: "decision",
-      titulo: "Decisión",
-      descripcion: "Algo que deseas decidir o elegir",
+      key: "INDIVIDUAL",
+      titulo: "INDIVIDUAL",
     },
     {
-      key: "suposición",
-      titulo: "Suposición",
-      descripcion: "Algo que crees que podría ser así",
+      key: "EMPRESARIO",
+      titulo: "EMPRESARIO",
     },
     {
-      key: "presuposición",
-      titulo: "Presuposición",
-      descripcion: "Algo que das por hecho",
+      key: "RH",
+      titulo: "RH",
+    },
+    {
+      key: "COACH",
+      titulo: "COACH",
     },
   ];
 
@@ -32,16 +44,16 @@ function Pantalla3() {
       <main className="w-full max-w-[560px] md:max-w-[980px]">
         <div className="text-center">
           <h1 className="text-[#1E2430] font-medium leading-tight text-5xl md:text-7xl">
-            Clasifica tu texto
+            Selecciona tu rol
           </h1>
 
           <p className="mt-6 text-[#2A2F39] text-2xl md:text-3xl leading-relaxed md:leading-loose">
-            Para acompañarte mejor, aclaremos desde dónde nace lo que escribiste.
+            Para personalizar tu experiencia, elige el rol que mejor te describe.
           </p>
         </div>
-        <div className="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-7">
+        <div className="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-7">
           {opciones.map((op) => {
-            const activa = seleccion === op.key;
+            const activa = rol === op.key;
 
             return (
               <label
@@ -57,10 +69,10 @@ function Pantalla3() {
               >
                 <input
                   type="radio"
-                  name="clasificacion"
+                  name="rol"
                   value={op.key}
                   checked={activa}
-                  onChange={() => setSeleccion(op.key)}
+                  onChange={() => setRol(op.key)}
                   className="sr-only"
                 />
 
@@ -68,9 +80,6 @@ function Pantalla3() {
                   <div>
                     <p className="text-[#1E2430] font-medium text-3xl md:text-4xl">
                       {op.titulo}
-                    </p>
-                    <p className="mt-3 text-[#2A2F39] text-xl md:text-2xl leading-relaxed">
-                      {op.descripcion}
                     </p>
                   </div>
                   <div
@@ -94,14 +103,14 @@ function Pantalla3() {
         </div>
         <div className="mt-12 md:mt-16 flex justify-center">
           <a
-            href={seleccion ? `?pantalla=4&tipo=${seleccion}` : undefined}
-            onClick={() => sessionStorage.setItem('navTarget', '4')}
+            href={rol ? "?pantalla=3" : undefined}
+            onClick={() => sessionStorage.setItem('navTarget', '3')}
             className={[
               "inline-flex w-full items-center justify-center rounded-2xl px-7 py-5",
               "text-white font-medium text-2xl transition",
               "bg-gradient-to-b from-[#2F3F7A] to-[#1E2C63]",
               "shadow-[0_18px_40px_rgba(16,24,40,0.22)]",
-              seleccion ? "active:scale-[0.99]" : "opacity-50 pointer-events-none",
+              rol ? "active:scale-[0.99]" : "opacity-50 pointer-events-none",
               "md:w-auto",
             ].join(" ")}
           >
@@ -113,4 +122,4 @@ function Pantalla3() {
   );
 }
 
-export default Pantalla3;
+export default Pantalla2b;

@@ -46,7 +46,7 @@ function Pantalla10() {
         <div className="mt-10 space-y-4">
           <div className="rounded-2xl border border-[#D6DEE6] bg-white px-6 py-5">
             <p className="text-[#5B6168] text-2xl leading-relaxed">
-              1. Busca un lugar comodo y si puedes cierra los ojos.
+              1. Busca un lugar cómodo y si puedes cierra los ojos.
             </p>
           </div>
           <div className="rounded-2xl border border-[#D6DEE6] bg-white px-6 py-5">

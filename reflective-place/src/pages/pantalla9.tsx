@@ -23,8 +23,8 @@ function Pantalla9() {
     () => [
       {
         id: "breathing-3min",
-        title: "Respiracion 3 min",
-        description: "Una pausa breve para calmar y reenfocar tu atencion. Si es necesario puedes tomar mas tiempo de respiración",
+        title: "Respiración 3 min",
+        description: "Una pausa breve para calmar y reenfocar tu atención. Si es necesario puedes tomar más tiempo de respiración",
       },
     ],
     []
@@ -35,7 +35,7 @@ function Pantalla9() {
     <section className="min-h-screen w-full bg-[#F7F4EF]">
       <main className="mx-auto w-full max-w-[560px] px-5 pt-12 pb-12">
         <h1 className="text-center font-semibold leading-tight text-5xl text-[#1E2430]">
-          Este recurso puede acompanarte ahora.
+          Este recurso puede acompañarte ahora.
         </h1>
 
         <div className="mt-10">
