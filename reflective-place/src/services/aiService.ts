@@ -59,15 +59,30 @@ class AIService {
   getConfigFromEnv(): AIConfig | null {
     const apiKey = import.meta.env.VITE_AI_API;
 
-    if (!apiKey) {
-      console.warn('VITE_AI_API no está configurada. Variables disponibles:', {
+    // Log detallado para debugging (solo en desarrollo o si no hay API key)
+    if (!apiKey || import.meta.env.DEV) {
+      const envInfo = {
         hasApiKey: !!import.meta.env.VITE_AI_API,
+        apiKeyLength: import.meta.env.VITE_AI_API?.length || 0,
         hasModel: !!import.meta.env.VITE_AI_MODEL,
+        model: import.meta.env.VITE_AI_MODEL,
         hasApiType: !!import.meta.env.VITE_OPENAI_API_TYPE,
+        apiType: import.meta.env.VITE_OPENAI_API_TYPE,
         mode: import.meta.env.MODE,
         prod: import.meta.env.PROD,
-      });
-      return null;
+        allEnvKeys: Object.keys(import.meta.env).filter(key => key.startsWith('VITE_')),
+      };
+      
+      if (!apiKey) {
+        console.warn('VITE_AI_API no está configurada. Variables disponibles:', envInfo);
+        return null;
+      } else if (import.meta.env.DEV) {
+        console.log('✅ Configuración de IA cargada correctamente:', {
+          hasApiKey: true,
+          model: envInfo.model,
+          apiType: envInfo.apiType,
+        });
+      }
     }
 
     const model = import.meta.env.VITE_AI_MODEL || 'gpt-5-nano';
