@@ -57,10 +57,16 @@ class AIService {
   }
 
   getConfigFromEnv(): AIConfig | null {
-    const apiKey = import.meta.env.VITE_AI_API_KEY;
+    const apiKey = import.meta.env.VITE_AI_API;
 
     if (!apiKey) {
-      console.warn('VITE_AI_API_KEY no está configurada');
+      console.warn('VITE_AI_API no está configurada. Variables disponibles:', {
+        hasApiKey: !!import.meta.env.VITE_AI_API,
+        hasModel: !!import.meta.env.VITE_AI_MODEL,
+        hasApiType: !!import.meta.env.VITE_OPENAI_API_TYPE,
+        mode: import.meta.env.MODE,
+        prod: import.meta.env.PROD,
+      });
       return null;
     }
 
@@ -79,9 +85,12 @@ class AIService {
     if (!this.config) {
       const envConfig = this.getConfigFromEnv();
       if (!envConfig) {
+        const isProduction = import.meta.env.PROD;
         return {
           content: '',
-          error: 'Servicio de IA no configurado. Por favor, configura VITE_AI_API_KEY en tu archivo .env',
+          error: isProduction
+            ? 'Servicio de IA no configurado. Por favor, configura VITE_AI_API en las variables de entorno de Vercel.'
+            : 'Servicio de IA no configurado. Por favor, configura VITE_AI_API en tu archivo .env',
         };
       }
       this.config = envConfig;
