@@ -16,7 +16,7 @@ Edita `.env` con tus credenciales:
 
 ```env
 VITE_AI_PROVIDER=openai
-VITE_AI_API_KEY=tu_api_key_aqui
+VITE_AI_API=tu_api_key_aqui
 VITE_AI_MODEL=gpt-4o-mini
 ```
 
@@ -28,7 +28,7 @@ VITE_AI_MODEL=gpt-4o-mini
 - Configuración:
   ```env
   VITE_AI_PROVIDER=openai
-  VITE_AI_API_KEY=sk-...
+  VITE_AI_API=sk-...
   VITE_AI_MODEL=gpt-4o-mini
   ```
 
@@ -38,7 +38,7 @@ VITE_AI_MODEL=gpt-4o-mini
 - Configuración:
   ```env
   VITE_AI_PROVIDER=anthropic
-  VITE_AI_API_KEY=sk-ant-...
+  VITE_AI_API=sk-ant-...
   VITE_AI_MODEL=claude-3-5-sonnet-20241022
   ```
 
@@ -171,7 +171,7 @@ Extiende `AIService` en `src/services/aiService.ts` agregando nuevos métodos pr
 ## Troubleshooting
 
 ### Error: "Servicio de IA no configurado"
-- Verifica que el archivo `.env` existe y tiene `VITE_AI_API_KEY`
+- Verifica que el archivo `.env` existe y tiene `VITE_AI_API`
 - Reinicia el servidor de desarrollo después de crear/modificar `.env`
 
 ### Error: "Error 401: Unauthorized"
