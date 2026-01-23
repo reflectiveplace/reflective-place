@@ -1,24 +1,11 @@
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import jsPDF from "jspdf";
-
-interface ReportData {
-  rol?: string;
-  texto?: string;
-  tipo?: string;
-  valuesDetected?: Array<{ name: string; description: string; intensity: number }>;
-  dominantValue?: { name: string };
-  valueType?: string;
-  beliefs?: Record<string, string>;
-  microhabit?: string;
-  evidence?: string;
-  reportType?: string;
-  userType?: string;
-  actionMode?: string;
-  resourceId?: string;
-  resonance?: string;
-}
+import { aiService, type ReportData } from "../services/aiService";
 
 function Pantalla16() {
+  const [aiSummary, setAiSummary] = useState<string>("");
+  const [isGeneratingSummary, setIsGeneratingSummary] = useState(false);
+
   const reportData = useMemo<ReportData>(() => {
     const data: ReportData = {};
 
@@ -99,6 +86,64 @@ function Pantalla16() {
 
     return data;
   }, []);
+
+  const handleGenerateSummary = async () => {
+    setIsGeneratingSummary(true);
+    try {
+      const result = await aiService.generateSummary(reportData);
+      if (result.error) {
+        console.error('Error generando resumen:', result.error);
+        setAiSummary('Error al generar el resumen. Por favor, intenta de nuevo.');
+      } else {
+        setAiSummary(result.content);
+        // Guardar el resumen en localStorage para incluirlo en el reporte
+        localStorage.setItem('aiSummary', result.content);
+      }
+    } catch (error) {
+      console.error('Error generando resumen:', error);
+      setAiSummary('Error al generar el resumen. Por favor, intenta de nuevo.');
+    } finally {
+      setIsGeneratingSummary(false);
+    }
+  };
+
+  // Generar resumen automáticamente al cargar la pantalla con los datos actuales
+  useEffect(() => {
+    let isMounted = true;
+
+    const generateOnLoad = async () => {
+      if (isGeneratingSummary) return;
+      
+      setIsGeneratingSummary(true);
+      try {
+        const result = await aiService.generateSummary(reportData);
+        if (!isMounted) return;
+        
+        if (result.error) {
+          console.error('Error generando resumen:', result.error);
+          setAiSummary('Error al generar el resumen. Por favor, intenta de nuevo.');
+        } else {
+          setAiSummary(result.content);
+          localStorage.setItem('aiSummary', result.content);
+        }
+      } catch (error) {
+        if (!isMounted) return;
+        console.error('Error generando resumen:', error);
+        setAiSummary('Error al generar el resumen. Por favor, intenta de nuevo.');
+      } finally {
+        if (isMounted) {
+          setIsGeneratingSummary(false);
+        }
+      }
+    };
+
+    generateOnLoad();
+
+    return () => {
+      isMounted = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Solo ejecutar una vez al montar el componente
 
   const generateHTMLContent = (): string => {
     const tipoLabels: Record<string, string> = {
@@ -298,6 +343,17 @@ function Pantalla16() {
   <div class="section">
     <h2>Resonancia</h2>
     <p>${resonanceEscapado}</p>
+  </div>`;
+    }
+
+    // Resumen generado por IA
+    const savedSummary = localStorage.getItem('aiSummary');
+    if (savedSummary) {
+      const summaryEscapado = savedSummary.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+      html += `
+  <div class="section">
+    <h2>Resumen Reflexivo</h2>
+    <div class="text-content">${summaryEscapado}</div>
   </div>`;
     }
 
@@ -549,7 +605,32 @@ function Pantalla16() {
 
       doc.setFontSize(11);
       doc.setTextColor(30, 36, 48);
-      doc.text(reportData.resonance, margin, yPosition);
+      const resonanceLines = doc.splitTextToSize(reportData.resonance, pageWidth - 2 * margin);
+      resonanceLines.forEach((line: string) => {
+        addNewPageIfNeeded(7);
+        doc.text(line, margin, yPosition);
+        yPosition += 6;
+      });
+      yPosition += 10;
+    }
+
+    // Resumen generado por IA
+    const savedSummary = localStorage.getItem('aiSummary');
+    if (savedSummary) {
+      addNewPageIfNeeded(30);
+      doc.setFontSize(16);
+      doc.setTextColor(47, 63, 122);
+      doc.text("Resumen Reflexivo", margin, yPosition);
+      yPosition += 15;
+
+      doc.setFontSize(11);
+      doc.setTextColor(30, 36, 48);
+      const summaryLines = doc.splitTextToSize(savedSummary, pageWidth - 2 * margin);
+      summaryLines.forEach((line: string) => {
+        addNewPageIfNeeded(7);
+        doc.text(line, margin, yPosition);
+        yPosition += 6;
+      });
     }
 
     doc.save(`reporte-reflexion-${new Date().toISOString().split("T")[0]}.pdf`);
@@ -561,6 +642,38 @@ function Pantalla16() {
         <h1 className="text-center font-semibold leading-tight text-5xl text-[#1E2430]">
           Exportar el reporte.
         </h1>
+
+        {/* Resumen generado por IA */}
+        {aiSummary && (
+          <div className="mt-10 rounded-2xl border border-[#D6DEE6] bg-white px-6 py-5 shadow-[0_1px_0_rgba(0,0,0,0.03)]">
+            <h2 className="text-[#2F3F7A] font-semibold text-3xl mb-4">Resumen Reflexivo</h2>
+            <p className="text-[#1E2430] text-xl leading-relaxed whitespace-pre-wrap">{aiSummary}</p>
+          </div>
+        )}
+
+        {/* Mostrar estado de carga o botón para regenerar */}
+        {isGeneratingSummary && !aiSummary && (
+          <div className="mt-10 rounded-2xl border border-[#D6DEE6] bg-white px-6 py-5 shadow-[0_1px_0_rgba(0,0,0,0.03)]">
+            <div className="flex items-center justify-center gap-4">
+              <div className="w-8 h-8 border-4 border-[#2F3F7A] border-t-transparent rounded-full animate-spin" />
+              <p className="text-[#1E2430] text-xl">Generando resumen...</p>
+            </div>
+          </div>
+        )}
+
+        {/* Botón para regenerar resumen si ya existe uno */}
+        {aiSummary && !isGeneratingSummary && (
+          <div className="mt-10">
+            <button
+              type="button"
+              onClick={handleGenerateSummary}
+              disabled={isGeneratingSummary}
+              className="inline-flex w-full items-center justify-center rounded-2xl px-7 py-5 text-white font-medium text-2xl transition bg-gradient-to-b from-[#4A90E2] to-[#357ABD] shadow-[0_18px_40px_rgba(16,24,40,0.22)] active:scale-[0.99] hover:from-[#5BA0F2] hover:to-[#458ACD] disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              🔄 Regenerar Resumen
+            </button>
+          </div>
+        )}
 
         <div className="mt-10 space-y-4">
           <button

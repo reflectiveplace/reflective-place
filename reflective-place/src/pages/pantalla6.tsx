@@ -1,12 +1,12 @@
 function Pantalla6() {
   const rows = [
-    { valor: "Valor #1", empoderadora: "frase breve", limitante: "frase breve" },
-    { valor: "Valor #2", empoderadora: "frase breve", limitante: "frase breve" },
-    { valor: "Valor #3", empoderadora: "frase breve", limitante: "frase breve" },
-    { valor: "Valor #4", empoderadora: "frase breve", limitante: "frase breve" },
-    { valor: "Valor #5", empoderadora: "frase breve", limitante: "frase breve" },
-    { valor: "Valor #6", empoderadora: "frase breve", limitante: "frase breve" },
-    { valor: "Valor #7", empoderadora: "frase breve", limitante: "frase breve" },
+    { valor: "Instrumentales", empoderadora: "Tengo herramientas para avanzar", limitante: "No tengo lo necesario" },
+    { valor: "Cognoscitivos", empoderadora: "Puedo comprender y aprender", limitante: "No entiendo bien las cosas" },
+    { valor: "Universales", empoderadora: "Esto trasciende y conecta", limitante: "Esto no aplica aquí" },
+    { valor: "Sociales", empoderadora: "Pertenezco y me conecto", limitante: "Estoy solo en esto" },
+    { valor: "Autodirigidos", empoderadora: "Me guío desde dentro", limitante: "Dependo de otros" },
+    { valor: "Orientadores/Directivos", empoderadora: "Sé hacia dónde voy", limitante: "No sé qué hacer" },
+    { valor: "Personales/Relacionales", empoderadora: "Me conozco y me relaciono", limitante: "No sé quién soy" },
   ];
 
   return (

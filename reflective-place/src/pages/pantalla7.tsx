@@ -9,11 +9,21 @@ type DominantValue = {
 
 type BeliefsMap = Record<string, BeliefChoice>;
 
+const VALUE_FAMILIES = [
+  "Instrumentales",
+  "Cognoscitivos",
+  "Universales",
+  "Sociales",
+  "Autodirigidos",
+  "Orientadores/Directivos",
+  "Personales/Relacionales",
+] as const;
+
 function Pantalla7() {
   const [dominantValue, setDominantValue] = useState<DominantValue | null>(null);
   const [valueType, setValueType] = useState<ValueType | null>(null);
   const [beliefs, setBeliefs] = useState<BeliefsMap>({});
-  const [currentValueKey, setCurrentValueKey] = useState<string>("Valor #1");
+  const [currentValueKey, setCurrentValueKey] = useState<string>(VALUE_FAMILIES[0]);
 
   useEffect(() => {
 
@@ -47,10 +57,10 @@ function Pantalla7() {
 
     const lsIdx = localStorage.getItem("beliefIndex");
     if (lsIdx && !Number.isNaN(Number(lsIdx))) {
-      const idx = Math.max(1, Math.min(7, Number(lsIdx)));
-      setCurrentValueKey(`Valor #${idx}`);
+      const idx = Math.max(0, Math.min(6, Number(lsIdx) - 1));
+      setCurrentValueKey(VALUE_FAMILIES[idx]);
     } else {
-      setCurrentValueKey("Valor #1");
+      setCurrentValueKey(VALUE_FAMILIES[0]);
     }
   }, []);
 
