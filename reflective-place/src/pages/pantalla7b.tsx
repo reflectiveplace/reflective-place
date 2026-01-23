@@ -10,6 +10,16 @@ type Row = {
   dot: "blue" | "red";
 };
 
+const VALUE_FAMILIES = [
+  "Instrumentales",
+  "Cognoscitivos",
+  "Universales",
+  "Sociales",
+  "Autodirigidos",
+  "Orientadores/Directivos",
+  "Personales/Relacionales",
+] as const;
+
 function Pantalla7b() {
   const [dominantValue, setDominantValue] = useState<string>("Integridad");
   const [resonance, setResonance] = useState<string>("Convicción");
@@ -80,24 +90,18 @@ function Pantalla7b() {
     try {
       if (lsBeliefs) {
         const beliefs: Record<string, BeliefChoice> = JSON.parse(lsBeliefs);
-        const keys = Object.keys(beliefs).filter((k) => k.startsWith("Valor #"));
-        if (keys.length) {
-          mapped = keys
-            .sort((a, b) => {
-              const na = Number(a.replace("Valor #", ""));
-              const nb = Number(b.replace("Valor #", ""));
-              return na - nb;
-            })
-            .slice(0, 7)
-            .map((k) => {
-              const choice = beliefs[k];
-              return {
-                valor: k,
-                tipo: (lsType === "ENDO" || lsType === "EXI" || lsType === "EXT") ? lsType : "ENDO",
-                dot: choice === "EMPODERADORA" ? "blue" : "red",
-                creencia: choice === "EMPODERADORA" ? "Creencia empoderadora" : "Creencia limitante",
-              };
-            });
+        // Buscar las familias de valores que tienen creencias asociadas
+        const familiesWithBeliefs = VALUE_FAMILIES.filter(family => beliefs[family] !== undefined);
+        if (familiesWithBeliefs.length) {
+          mapped = familiesWithBeliefs.map((family) => {
+            const choice = beliefs[family];
+            return {
+              valor: family,
+              tipo: (lsType === "ENDO" || lsType === "EXI" || lsType === "EXT") ? lsType : "ENDO",
+              dot: choice === "EMPODERADORA" ? "blue" : "red",
+              creencia: choice === "EMPODERADORA" ? "Creencia empoderadora" : "Creencia limitante",
+            };
+          });
         }
       }
     } catch {
