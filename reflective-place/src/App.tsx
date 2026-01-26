@@ -1,3 +1,5 @@
+import { useAuth } from './hooks/useAuth'
+import Login from './pages/Login'
 import Pantalla1 from './pages/pantalla1'
 import Pantalla2 from './pages/pantalla2'
 import Pantalla2b from './pages/pantalla2b'
@@ -20,6 +22,12 @@ import Pantalla15 from './pages/pantalla15'
 import Pantalla16 from './pages/pantalla16'
 
 function App() {
+  const { isAuthenticated } = useAuth()
+
+  if (!isAuthenticated) {
+    return <Login />
+  }
+
   const screen = new URLSearchParams(window.location.search).get('pantalla')
   const navTarget = sessionStorage.getItem('navTarget')
   let allowScreen = !screen
