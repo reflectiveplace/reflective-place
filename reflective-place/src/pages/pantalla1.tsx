@@ -25,13 +25,16 @@ function Pantalla1() {
             </p>
           </div>
 
-          <a
-            href="?pantalla=2"
-            onClick={() => sessionStorage.setItem('navTarget', '2')}
+          <button
+            onClick={() => {
+              sessionStorage.setItem('navTarget', '2');
+              window.history.pushState(null, '', '?pantalla=2');
+              window.dispatchEvent(new Event('navigation'));
+            }}
             className="mt-14 w-full inline-flex items-center justify-center rounded-2xl px-7 py-5 text-white font-medium text-2xl transition bg-gradient-to-b from-[#2F3F7A] to-[#1E2C63] shadow-[0_18px_40px_rgba(16,24,40,0.22)] active:scale-[0.99]"
           >
             Continuar
-          </a>
+          </button>
         </main>
       </div>
     </section>

@@ -26,26 +26,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   });
 
   useEffect(() => {
-    const handlePageHide = () => {
-      clearAllStorage();
+    const handlePageHide = (event: PageTransitionEvent) => {
+      // Solo limpiar si la página se está descartando (no si se está guardando en caché)
+      // Esto evita limpiar en navegaciones internas de la SPA
+      if (event.persisted === false) {
+        clearAllStorage();
+      }
     };
 
-    const handleBeforeUnload = () => {
-      clearAllStorage();
-    };
-
-    const handleUnload = () => {
-      clearAllStorage();
-    };
-
+    // pagehide es más confiable que beforeunload/unload para detectar cierre real
     window.addEventListener('pagehide', handlePageHide);
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    window.addEventListener('unload', handleUnload);
 
     return () => {
       window.removeEventListener('pagehide', handlePageHide);
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-      window.removeEventListener('unload', handleUnload);
     };
   }, []);
 
