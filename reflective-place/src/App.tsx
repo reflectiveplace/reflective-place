@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { useAuth } from './hooks/useAuth'
 import Login from './pages/Login'
 import Pantalla1 from './pages/pantalla1'
@@ -23,12 +24,35 @@ import Pantalla16 from './pages/pantalla16'
 
 function App() {
   const { isAuthenticated } = useAuth()
+  const [location, setLocation] = useState(window.location.search)
+
+  useEffect(() => {
+    const updateLocation = () => {
+      setLocation(window.location.search)
+    }
+
+    const handlePopState = () => {
+      updateLocation()
+    }
+
+    const handleNavigation = () => {
+      setTimeout(updateLocation, 0)
+    }
+
+    window.addEventListener('popstate', handlePopState)
+    window.addEventListener('navigation', handleNavigation)
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState)
+      window.removeEventListener('navigation', handleNavigation)
+    }
+  }, [])
 
   if (!isAuthenticated) {
     return <Login />
   }
 
-  const screen = new URLSearchParams(window.location.search).get('pantalla')
+  const screen = new URLSearchParams(location).get('pantalla')
   const navTarget = sessionStorage.getItem('navTarget')
   let allowScreen = !screen
 
